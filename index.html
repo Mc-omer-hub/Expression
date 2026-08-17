@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>更多表情包 - 模组文档</title>
+<link rel="icon" type="image/x-icon" href="favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+<link rel="icon" type="image/png" sizes="64x64" href="favicon-64.png">
+<link rel="apple-touch-icon" sizes="180x180" href="favicon-180.png">
+<style>
+  :root {
+    --bg:#060a12; --bg2:#0a101d; --panel:rgba(255,255,255,.04);
+    --panel2:rgba(255,255,255,.08); --text:#f2f6fc; --muted:#8b98ad;
+    --accent:#5b8cff; --accent2:#00d4ff; --mc:#3ddc84; --border:rgba(255,255,255,.08);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:"Inter","Segoe UI","Microsoft YaHei",sans-serif;
+    background:var(--bg); color:var(--text); line-height:1.6;
+    overflow-x:hidden;
+  }
+  /* 背景光晕 */
+  body::before {
+    content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background:
+      radial-gradient(600px 400px at 15% 0%, rgba(91,140,255,.15), transparent 60%),
+      radial-gradient(700px 500px at 85% 10%, rgba(0,212,255,.08), transparent 60%),
+      radial-gradient(500px 400px at 50% 90%, rgba(91,140,255,.06), transparent 60%);
+  }
+  /* ===== 顶部导航 ===== */
+  nav.topnav {
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; gap:24px;
+    padding:14px 32px; backdrop-filter:blur(16px);
+    background:rgba(6,10,18,.7);
+    border-bottom:1px solid var(--border);
+  }
+  nav.topnav .logo {
+    display:flex; align-items:center; gap:10px; font-weight:700; font-size:1.05em;
+    white-space:nowrap;
+  }
+  nav.topnav .logo-mark {
+    width:28px; height:28px; border-radius:8px;
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden; flex-shrink:0;
+    background:rgba(255,255,255,.06); border:1px solid var(--border);
+  }
+  nav.topnav .logo-mark img { width:100%; height:100%; display:block; }
+  nav.topnav .tabs {
+    display:flex; gap:4px; overflow-x:auto; flex:1; scrollbar-width:none;
+  }
+  nav.topnav .tabs::-webkit-scrollbar { display:none; }
+  nav.topnav .tabs a {
+    color:var(--muted); text-decoration:none; padding:6px 12px;
+    border-radius:8px; white-space:nowrap; font-size:.88em; transition:all .18s;
+  }
+  nav.topnav .tabs a:hover { background:var(--panel2); color:var(--text); }
+  /* ===== Hero 区 ===== */
+  header.hero {
+    padding:140px 24px 70px; text-align:center; position:relative;
+  }
+  header.hero .eyebrow {
+    display:inline-block; font-size:.8em; color:var(--accent2);
+    letter-spacing:.14em; text-transform:uppercase; margin-bottom:18px;
+    padding:6px 16px; border-radius:100px;
+    border:1px solid rgba(0,212,255,.3); background:rgba(0,212,255,.06);
+  }
+  header.hero h1 {
+    font-size:clamp(2.6em,6vw,4.4em); font-weight:800; letter-spacing:-.02em;
+    background:linear-gradient(180deg,#fff, #b9c7e4);
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+    line-height:1.15; margin-bottom:20px;
+  }
+  header.hero h1 .grad {
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  }
+  header.hero p {
+    color:var(--muted); font-size:1.15em; max-width:640px; margin:0 auto 30px;
+  }
+  header.hero .cta-row { display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+  header.hero .btn {
+    display:inline-flex; align-items:center; gap:8px;
+    padding:12px 26px; border-radius:12px; font-weight:600; font-size:.95em;
+    text-decoration:none; transition:all .2s; cursor:pointer;
+  }
+  header.hero .btn-primary {
+    background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff;
+    border:none; box-shadow:0 8px 24px rgba(91,140,255,.3);
+  }
+  header.hero .btn-primary:hover { transform:translateY(-2px); box-shadow:0 12px 32px rgba(91,140,255,.45); }
+  header.hero .btn-ghost {
+    background:transparent; color:var(--text); border:1px solid var(--border);
+  }
+  header.hero .btn-ghost:hover { background:var(--panel2); border-color:var(--muted); }
+  /* ===== 效果演示 ===== */
+  .demo {
+    max-width:560px; margin:32px auto 0; text-align:left;
+  }
+  .demo-row { margin:10px 0; }
+  .demo-label {
+    display:block; font-size:.78em; color:var(--muted); margin-bottom:6px;
+  }
+  .demo-box {
+    background:#0d1424; border:1px solid var(--border); border-radius:12px;
+    padding:14px 18px; font-size:.95em; color:#c9d6f0;
+    font-family:Consolas,monospace;
+  }
+  .demo-box b {
+    color:var(--accent2); font-weight:600;
+    background:rgba(0,212,255,.1); border-radius:6px; padding:1px 5px;
+  }
+  .demo-emoji {
+    width:20px; height:20px; vertical-align:-5px; margin:0 2px;
+    image-rendering:pixelated; display:inline-block;
+  }
+  .demo-arrow {
+    text-align:center; color:var(--muted); font-size:.8em; margin:8px 0;
+  }
+  main { max-width:1240px; margin:0 auto; padding:24px 32px 60px; }
+  /* ===== 搜索 ===== */
+  .search-box {
+    background:var(--panel); border:1px solid var(--border);
+    border-radius:14px; padding:10px 16px; margin:20px 0 32px;
+    backdrop-filter:blur(12px);
+    display:flex; align-items:center; gap:10px;
+    transition:border-color .2s;
+  }
+  .search-box:focus-within { border-color:var(--accent); }
+  .search-box .icon { color:var(--muted); font-size:1.1em; }
+  .search-box input {
+    width:100%; padding:8px 0; border:none; background:transparent;
+    color:var(--text); font-size:1em; outline:none;
+  }
+  .search-box input::placeholder { color:var(--muted); }
+  /* ===== 使用教程 ===== */
+  .howto {
+    background:var(--panel); border:1px solid var(--border); border-radius:18px;
+    padding:30px; margin:20px 0 40px; backdrop-filter:blur(12px);
+  }
+  .howto h2 { color:var(--text); margin-bottom:16px; font-size:1.25em; display:flex; align-items:center; gap:10px; }
+  .howto h2::before {
+    content:""; width:4px; height:18px; border-radius:4px;
+    background:linear-gradient(180deg,var(--accent),var(--accent2));
+  }
+  .howto .example {
+    background:#0d1424; border-radius:10px; padding:14px 18px;
+    font-family:Consolas,monospace; margin:10px 0;
+    border:1px solid var(--border); color:#c9d6f0; overflow-x:auto;
+  }
+  .howto ul { padding-left:20px; margin:8px 0; }
+  .howto li { margin:6px 0; color:var(--muted); }
+  .howto code { color:var(--accent2); font-family:Consolas,monospace; }
+  /* ===== 分类区块 ===== */
+  .section { margin:44px 0; }
+  .section h2 {
+    display:flex; align-items:center; gap:10px; font-size:1.35em;
+    font-weight:700; margin-bottom:20px;
+  }
+  .section h2::after {
+    content:""; flex:1; height:1px; margin-left:8px;
+    background:linear-gradient(90deg,var(--border),transparent);
+  }
+  .badge { font-size:.65em; padding:3px 10px; border-radius:100px; font-weight:600; }
+  .badge-mc { background:rgba(61,220,132,.12); color:var(--mc); border:1px solid rgba(61,220,132,.3); }
+  .badge-good { background:rgba(91,140,255,.12); color:var(--accent); border:1px solid rgba(91,140,255,.3); }
+  .badge-neg { background:rgba(255,120,150,.12); color:#ff7896; border:1px solid rgba(255,120,150,.3); }
+  .count { color:var(--muted); font-size:.7em; font-weight:normal; }
+  .grid {
+    display:grid; grid-template-columns:repeat(auto-fill,minmax(104px,1fr)); gap:12px;
+  }
+  .emote-card {
+    background:var(--panel); border:1px solid var(--border); border-radius:14px;
+    padding:12px 6px; text-align:center; cursor:pointer; position:relative;
+    backdrop-filter:blur(8px);
+    transition:all .2s;
+  }
+  .emote-card:hover {
+    border-color:rgba(91,140,255,.5); transform:translateY(-3px);
+    box-shadow:0 8px 24px rgba(0,0,0,.35);
+    background:var(--panel2);
+  }
+  .emote-card .copy-hint {
+    position:absolute; top:6px; right:8px; font-size:.6em; color:var(--muted);
+    opacity:0; transition:opacity .15s;
+  }
+  .emote-card:hover .copy-hint { opacity:1; }
+  .emote-card.copied {
+    border-color:var(--mc); background:rgba(61,220,132,.08);
+  }
+  .emote-img {
+    width:60px; height:60px; margin:0 auto 8px;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(0,0,0,.25); border-radius:12px;
+  }
+  .emote-img img { image-rendering:pixelated; width:52px; height:52px; }
+  .emote-code { font-size:.62em; color:var(--muted); font-family:Consolas,monospace; }
+  .emote-trigger { font-size:.82em; color:var(--accent); margin-top:3px; font-family:Consolas,monospace; }
+  footer {
+    text-align:center; color:var(--muted); padding:40px 16px;
+    border-top:1px solid var(--border); font-size:.85em;
+  }
+  .hidden { display:none !important; }
+  /* ===== 滚动渐入 ===== */
+  .reveal { opacity:0; transform:translateY(24px); transition:all .6s ease; }
+  .reveal.in { opacity:1; transform:translateY(0); }
+  /* ===== 回到顶部 ===== */
+  #toTop {
+    position:fixed; right:24px; bottom:24px; z-index:200;
+    width:48px; height:48px; border-radius:14px;
+    background:linear-gradient(135deg,var(--accent),var(--accent2)); color:#fff;
+    border:none; cursor:pointer; font-size:1.3em; line-height:48px; text-align:center;
+    box-shadow:0 8px 24px rgba(91,140,255,.4);
+    opacity:0; visibility:hidden; transform:translateY(12px);
+    transition:all .25s;
+  }
+  #toTop.show { opacity:1; visibility:visible; transform:translateY(0); }
+  #toTop:hover { filter:brightness(1.12); transform:translateY(-2px); }
+  #toast {
+    position:fixed; left:50%; bottom:70px; transform:translateX(-50%) translateY(20px);
+    background:#0d1424; color:var(--text); border:1px solid var(--border);
+    border-radius:12px; padding:12px 24px; font-size:.9em;
+    opacity:0; visibility:hidden; transition:all .25s; z-index:300;
+    box-shadow:0 8px 32px rgba(0,0,0,.5);
+  }
+  #toast.show { opacity:1; visibility:visible; transform:translateX(-50%) translateY(0); }
+  @media (max-width:720px) {
+    nav.topnav { padding:12px 16px; }
+    main { padding:16px 16px 50px; }
+    header.hero { padding:110px 16px 50px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="topnav">
+  <div class="logo">
+    <span class="logo-mark"><img src="favicon-64.png" alt="logo"></span>
+    <span>更多表情包</span>
+  </div>
+  <div class="tabs" id="tabs"></div>
+</nav>
+
+<header class="hero">
+  <div class="eyebrow">Chat Emoji Pack · ModSDK</div>
+  <h1>让聊天更有<span class="grad">趣味</span></h1>
+  <p>在聊天中输入 <code>*(表情名)</code>，一键替换为 327 个精美自定义表情，覆盖情绪、动物、食物与 Minecraft 经典物品。</p>
+  <div class="cta-row">
+    <a class="btn btn-primary" href="#如何使用">开始使用</a>
+    <a class="btn btn-ghost" href="#Minecraft 物品">Minecraft 物品</a>
+  </div>
+  <div class="demo">
+    <div class="demo-row">
+      <span class="demo-label">你在聊天框输入</span>
+      <div class="demo-box">今天好高兴啊!<b>*(笑)</b> 我家小狗<b>*(狗)</b> 又拆家了<b>*(哭)</b></div>
+    </div>
+    <div class="demo-arrow">&#8595; 发送后自动替换</div>
+    <div class="demo-row">
+      <span class="demo-label">聊天里实际显示</span>
+      <div class="demo-box">今天好高兴啊!<img class="demo-emoji" src="images/emotes/E100.png" alt="笑"> 我家小狗<img class="demo-emoji" src="images/emotes/E17F.png" alt="狗"> 又拆家了<img class="demo-emoji" src="images/emotes/E118.png" alt="哭"></div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="howto" id="如何使用">
+    <h2>如何使用</h2>
+    <ul>
+      <li>在聊天框输入 <code>*(表情名)</code>，发送后会自动替换为对应表情</li>
+      <li>一条消息可以包含多个表情，例如：<code>今天好高兴啊!*(笑)</code></li>
+      <li>点击任意表情卡片可快速复制其代码</li>
+      <li>如果输入的表情名不存在，会原样显示文本</li>
+    </ul>
+    <div class="example">今天好高兴啊!*(笑) 我家小狗*(狗) 又拆家了*(哭)</div>
+    <div class="example">我有一把*(钻石剑) 和*(盾牌)，还有*(金苹果)和*(不死图腾)</div>
+    <div class="example">生日快乐!*(生日蛋糕) *(礼物) *(爱心)</div>
+  </div>
+
+  <div class="search-box">
+    <span class="icon">&#128269;</span>
+    <input type="text" id="search" placeholder="搜索表情名，例如：笑、钻石剑、恐龙...">
+  </div>
+
+<section class="section reveal" id="笑脸"><h2>笑脸 <span class="badge badge-good">常用</span> <span class="count">29 个</span></h2><div class="grid"><div class="emote-card" data-trigger="*(笑)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E100.png" alt="笑"></div><div class="emote-code">E100</div><div class="emote-trigger">*(笑)</div></div>
+<div class="emote-card" data-trigger="*(大笑)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E101.png" alt="大笑"></div><div class="emote-code">E101</div><div class="emote-trigger">*(大笑)</div></div>
+<div class="emote-card" data-trigger="*(咧嘴笑)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E102.png" alt="咧嘴笑"></div><div class="emote-code">E102</div><div class="emote-trigger">*(咧嘴笑)</div></div>
+<div class="emote-card" data-trigger="*(笑哭)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E103.png" alt="笑哭"></div><div class="emote-code">E103</div><div class="emote-trigger">*(笑哭)</div></div>
+<div class="emote-card" data-trigger="*(眯眼笑)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E104.png" alt="眯眼笑"></div><div class="emote-code">E104</div><div class="emote-trigger">*(眯眼笑)</div></div>
+<div class="emote-card" data-trigger="*(憨笑)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E105.png" alt="憨笑"></div><div class="emote-code">E105</div><div class="emote-trigger">*(憨笑)</div></div>
+<div class="emote-card" data-trigger="*(调皮)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E106.png" alt="调皮"></div><div class="emote-code">E106</div><div class="emote-trigger">*(调皮)</div></div>
+<div class="emote-card" data-trigger="*(眨眼)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E107.png" alt="眨眼"></div><div class="emote-code">E107</div><div class="emote-trigger">*(眨眼)</div></div>
+<div class="emote-card" data-trigger="*(好开心)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E108.png" alt="好开心"></div><div class="emote-code">E108</div><div class="emote-trigger">*(好开心)</div></div>
+<div class="emote-card" data-trigger="*(得意)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E109.png" alt="得意"></div><div class="emote-code">E109</div><div class="emote-trigger">*(得意)</div></div>
+<div class="emote-card" data-trigger="*(坏笑)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E10A.png" alt="坏笑"></div><div class="emote-code">E10A</div><div class="emote-trigger">*(坏笑)</div></div>
+<div class="emote-card" data-trigger="*(酷)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E10B.png" alt="酷"></div><div class="emote-code">E10B</div><div class="emote-trigger">*(酷)</div></div>
+<div class="emote-card" data-trigger="*(戴墨镜)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E10C.png" alt="戴墨镜"></div><div class="emote-code">E10C</div><div class="emote-trigger">*(戴墨镜)</div></div>
+<div class="emote-card" data-trigger="*(花痴)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E10D.png" alt="花痴"></div><div class="emote-code">E10D</div><div class="emote-trigger">*(花痴)</div></div>
+<div class="emote-card" data-trigger="*(亲亲)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E10E.png" alt="亲亲"></div><div class="emote-code">E10E</div><div class="emote-trigger">*(亲亲)</div></div>
+<div class="emote-card" data-trigger="*(飞吻)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E10F.png" alt="飞吻"></div><div class="emote-code">E10F</div><div class="emote-trigger">*(飞吻)</div></div>
+<div class="emote-card" data-trigger="*(吐舌)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E110.png" alt="吐舌"></div><div class="emote-code">E110</div><div class="emote-trigger">*(吐舌)</div></div>
+<div class="emote-card" data-trigger="*(好吃)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E111.png" alt="好吃"></div><div class="emote-code">E111</div><div class="emote-trigger">*(好吃)</div></div>
+<div class="emote-card" data-trigger="*(馋)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E112.png" alt="馋"></div><div class="emote-code">E112</div><div class="emote-trigger">*(馋)</div></div>
+<div class="emote-card" data-trigger="*(流口水)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E113.png" alt="流口水"></div><div class="emote-code">E113</div><div class="emote-trigger">*(流口水)</div></div>
+<div class="emote-card" data-trigger="*(天使)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E114.png" alt="天使"></div><div class="emote-code">E114</div><div class="emote-trigger">*(天使)</div></div>
+<div class="emote-card" data-trigger="*(小恶魔)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E115.png" alt="小恶魔"></div><div class="emote-code">E115</div><div class="emote-trigger">*(小恶魔)</div></div>
+<div class="emote-card" data-trigger="*(牛)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E116.png" alt="牛"></div><div class="emote-code">E116</div><div class="emote-trigger">*(牛)</div></div>
+<div class="emote-card" data-trigger="*(舒服)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E117.png" alt="舒服"></div><div class="emote-code">E117</div><div class="emote-trigger">*(舒服)</div></div>
+<div class="emote-card" data-trigger="*(馋嘴)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E151.png" alt="馋嘴"></div><div class="emote-code">E151</div><div class="emote-trigger">*(馋嘴)</div></div>
+<div class="emote-card" data-trigger="*(哈哈)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E208.png" alt="哈哈"></div><div class="emote-code">E208</div><div class="emote-trigger">*(哈哈)</div></div>
+<div class="emote-card" data-trigger="*(么么哒)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E20D.png" alt="么么哒"></div><div class="emote-code">E20D</div><div class="emote-trigger">*(么么哒)</div></div>
+<div class="emote-card" data-trigger="*(嘿嘿)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E20E.png" alt="嘿嘿"></div><div class="emote-code">E20E</div><div class="emote-trigger">*(嘿嘿)</div></div>
+<div class="emote-card" data-trigger="*(略略略)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E210.png" alt="略略略"></div><div class="emote-code">E210</div><div class="emote-trigger">*(略略略)</div></div></div></section>
+<section class="section reveal" id="负面"><h2>负面 <span class="badge badge-neg">情感</span> <span class="count">64 个</span></h2><div class="grid"><div class="emote-card" data-trigger="*(哭)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E118.png" alt="哭"></div><div class="emote-code">E118</div><div class="emote-trigger">*(哭)</div></div>
+<div class="emote-card" data-trigger="*(大哭)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E119.png" alt="大哭"></div><div class="emote-code">E119</div><div class="emote-trigger">*(大哭)</div></div>
+<div class="emote-card" data-trigger="*(嚎啕大哭)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E11A.png" alt="嚎啕大哭"></div><div class="emote-code">E11A</div><div class="emote-trigger">*(嚎啕大哭)</div></div>
+<div class="emote-card" data-trigger="*(伤心)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E11B.png" alt="伤心"></div><div class="emote-code">E11B</div><div class="emote-trigger">*(伤心)</div></div>
+<div class="emote-card" data-trigger="*(委屈)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E11C.png" alt="委屈"></div><div class="emote-code">E11C</div><div class="emote-trigger">*(委屈)</div></div>
+<div class="emote-card" data-trigger="*(失落)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E11D.png" alt="失落"></div><div class="emote-code">E11D</div><div class="emote-trigger">*(失落)</div></div>
+<div class="emote-card" data-trigger="*(无语)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E11E.png" alt="无语"></div><div class="emote-code">E11E</div><div class="emote-trigger">*(无语)</div></div>
+<div class="emote-card" data-trigger="*(无奈)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E11F.png" alt="无奈"></div><div class="emote-code">E11F</div><div class="emote-trigger">*(无奈)</div></div>
+<div class="emote-card" data-trigger="*(翻白眼)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E120.png" alt="翻白眼"></div><div class="emote-code">E120</div><div class="emote-trigger">*(翻白眼)</div></div>
+<div class="emote-card" data-trigger="*(生气)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E121.png" alt="生气"></div><div class="emote-code">E121</div><div class="emote-trigger">*(生气)</div></div>
+<div class="emote-card" data-trigger="*(愤怒)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E122.png" alt="愤怒"></div><div class="emote-code">E122</div><div class="emote-trigger">*(愤怒)</div></div>
+<div class="emote-card" data-trigger="*(怒火)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E123.png" alt="怒火"></div><div class="emote-code">E123</div><div class="emote-trigger">*(怒火)</div></div>
+<div class="emote-card" data-trigger="*(哼)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E124.png" alt="哼"></div><div class="emote-code">E124</div><div class="emote-trigger">*(哼)</div></div>
+<div class="emote-card" data-trigger="*(怕)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E125.png" alt="怕"></div><div class="emote-code">E125</div><div class="emote-trigger">*(怕)</div></div>
+<div class="emote-card" data-trigger="*(害怕)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E126.png" alt="害怕"></div><div class="emote-code">E126</div><div class="emote-trigger">*(害怕)</div></div>
+<div class="emote-card" data-trigger="*(尖叫)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E127.png" alt="尖叫"></div><div class="emote-code">E127</div><div class="emote-trigger">*(尖叫)</div></div>
+<div class="emote-card" data-trigger="*(惊恐)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E128.png" alt="惊恐"></div><div class="emote-code">E128</div><div class="emote-trigger">*(惊恐)</div></div>
+<div class="emote-card" data-trigger="*(惊讶)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E129.png" alt="惊讶"></div><div class="emote-code">E129</div><div class="emote-trigger">*(惊讶)</div></div>
+<div class="emote-card" data-trigger="*(震惊)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E12A.png" alt="震惊"></div><div class="emote-code">E12A</div><div class="emote-trigger">*(震惊)</div></div>
+<div class="emote-card" data-trigger="*(目瞪口呆)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E12B.png" alt="目瞪口呆"></div><div class="emote-code">E12B</div><div class="emote-trigger">*(目瞪口呆)</div></div>
+<div class="emote-card" data-trigger="*(呆)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E12C.png" alt="呆"></div><div class="emote-code">E12C</div><div class="emote-trigger">*(呆)</div></div>
+<div class="emote-card" data-trigger="*(脸红)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E12D.png" alt="脸红"></div><div class="emote-code">E12D</div><div class="emote-trigger">*(脸红)</div></div>
+<div class="emote-card" data-trigger="*(晕)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E12E.png" alt="晕"></div><div class="emote-code">E12E</div><div class="emote-trigger">*(晕)</div></div>
+<div class="emote-card" data-trigger="*(头晕)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E12F.png" alt="头晕"></div><div class="emote-code">E12F</div><div class="emote-trigger">*(头晕)</div></div>
+<div class="emote-card" data-trigger="*(冷)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E130.png" alt="冷"></div><div class="emote-code">E130</div><div class="emote-trigger">*(冷)</div></div>
+<div class="emote-card" data-trigger="*(热)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E131.png" alt="热"></div><div class="emote-code">E131</div><div class="emote-trigger">*(热)</div></div>
+<div class="emote-card" data-trigger="*(困)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E132.png" alt="困"></div><div class="emote-code">E132</div><div class="emote-trigger">*(困)</div></div>
+<div class="emote-card" data-trigger="*(睡觉)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E133.png" alt="睡觉"></div><div class="emote-code">E133</div><div class="emote-trigger">*(睡觉)</div></div>
+<div class="emote-card" data-trigger="*(zzz)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E134.png" alt="zzz"></div><div class="emote-code">E134</div><div class="emote-trigger">*(zzz)</div></div>
+<div class="emote-card" data-trigger="*(疲惫)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E135.png" alt="疲惫"></div><div class="emote-code">E135</div><div class="emote-trigger">*(疲惫)</div></div>
+<div class="emote-card" data-trigger="*(累)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E136.png" alt="累"></div><div class="emote-code">E136</div><div class="emote-trigger">*(累)</div></div>
+<div class="emote-card" data-trigger="*(担心)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E137.png" alt="担心"></div><div class="emote-code">E137</div><div class="emote-trigger">*(担心)</div></div>
+<div class="emote-card" data-trigger="*(焦虑)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E138.png" alt="焦虑"></div><div class="emote-code">E138</div><div class="emote-trigger">*(焦虑)</div></div>
+<div class="emote-card" data-trigger="*(皱眉)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E139.png" alt="皱眉"></div><div class="emote-code">E139</div><div class="emote-trigger">*(皱眉)</div></div>
+<div class="emote-card" data-trigger="*(紧张)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E13A.png" alt="紧张"></div><div class="emote-code">E13A</div><div class="emote-trigger">*(紧张)</div></div>
+<div class="emote-card" data-trigger="*(冷汗)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E13B.png" alt="冷汗"></div><div class="emote-code">E13B</div><div class="emote-trigger">*(冷汗)</div></div>
+<div class="emote-card" data-trigger="*(冒汗)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E13C.png" alt="冒汗"></div><div class="emote-code">E13C</div><div class="emote-trigger">*(冒汗)</div></div>
+<div class="emote-card" data-trigger="*(思考)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E13D.png" alt="思考"></div><div class="emote-code">E13D</div><div class="emote-trigger">*(思考)</div></div>
+<div class="emote-card" data-trigger="*(沉思)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E13E.png" alt="沉思"></div><div class="emote-code">E13E</div><div class="emote-trigger">*(沉思)</div></div>
+<div class="emote-card" data-trigger="*(冥想)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E13F.png" alt="冥想"></div><div class="emote-code">E13F</div><div class="emote-trigger">*(冥想)</div></div>
+<div class="emote-card" data-trigger="*(生病)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E140.png" alt="生病"></div><div class="emote-code">E140</div><div class="emote-trigger">*(生病)</div></div>
+<div class="emote-card" data-trigger="*(口罩)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E141.png" alt="口罩"></div><div class="emote-code">E141</div><div class="emote-trigger">*(口罩)</div></div>
+<div class="emote-card" data-trigger="*(发烧)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E142.png" alt="发烧"></div><div class="emote-code">E142</div><div class="emote-trigger">*(发烧)</div></div>
+<div class="emote-card" data-trigger="*(吐)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E143.png" alt="吐"></div><div class="emote-code">E143</div><div class="emote-trigger">*(吐)</div></div>
+<div class="emote-card" data-trigger="*(呕吐)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E144.png" alt="呕吐"></div><div class="emote-code">E144</div><div class="emote-trigger">*(呕吐)</div></div>
+<div class="emote-card" data-trigger="*(恶心)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E145.png" alt="恶心"></div><div class="emote-code">E145</div><div class="emote-trigger">*(恶心)</div></div>
+<div class="emote-card" data-trigger="*(晕菜)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E146.png" alt="晕菜"></div><div class="emote-code">E146</div><div class="emote-trigger">*(晕菜)</div></div>
+<div class="emote-card" data-trigger="*(闭嘴)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E147.png" alt="闭嘴"></div><div class="emote-code">E147</div><div class="emote-trigger">*(闭嘴)</div></div>
+<div class="emote-card" data-trigger="*(嘘)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E148.png" alt="嘘"></div><div class="emote-code">E148</div><div class="emote-trigger">*(嘘)</div></div>
+<div class="emote-card" data-trigger="*(不要)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E149.png" alt="不要"></div><div class="emote-code">E149</div><div class="emote-trigger">*(不要)</div></div>
+<div class="emote-card" data-trigger="*(不行)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E14A.png" alt="不行"></div><div class="emote-code">E14A</div><div class="emote-trigger">*(不行)</div></div>
+<div class="emote-card" data-trigger="*(沮丧)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E14B.png" alt="沮丧"></div><div class="emote-code">E14B</div><div class="emote-trigger">*(沮丧)</div></div>
+<div class="emote-card" data-trigger="*(无语问天)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E14C.png" alt="无语问天"></div><div class="emote-code">E14C</div><div class="emote-trigger">*(无语问天)</div></div>
+<div class="emote-card" data-trigger="*(耸肩)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E14D.png" alt="耸肩"></div><div class="emote-code">E14D</div><div class="emote-trigger">*(耸肩)</div></div>
+<div class="emote-card" data-trigger="*(唉)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E14E.png" alt="唉"></div><div class="emote-code">E14E</div><div class="emote-trigger">*(唉)</div></div>
+<div class="emote-card" data-trigger="*(苦脸)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E14F.png" alt="苦脸"></div><div class="emote-code">E14F</div><div class="emote-trigger">*(苦脸)</div></div>
+<div class="emote-card" data-trigger="*(难吃)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E150.png" alt="难吃"></div><div class="emote-code">E150</div><div class="emote-trigger">*(难吃)</div></div>
+<div class="emote-card" data-trigger="*(哇)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E209.png" alt="哇"></div><div class="emote-code">E209</div><div class="emote-trigger">*(哇)</div></div>
+<div class="emote-card" data-trigger="*(啊)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E20A.png" alt="啊"></div><div class="emote-code">E20A</div><div class="emote-trigger">*(啊)</div></div>
+<div class="emote-card" data-trigger="*(哦)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E20B.png" alt="哦"></div><div class="emote-code">E20B</div><div class="emote-trigger">*(哦)</div></div>
+<div class="emote-card" data-trigger="*(嗯)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E20C.png" alt="嗯"></div><div class="emote-code">E20C</div><div class="emote-trigger">*(嗯)</div></div>
+<div class="emote-card" data-trigger="*(切)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E20F.png" alt="切"></div><div class="emote-code">E20F</div><div class="emote-trigger">*(切)</div></div>
+<div class="emote-card" data-trigger="*(呜呜)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E211.png" alt="呜呜"></div><div class="emote-code">E211</div><div class="emote-trigger">*(呜呜)</div></div>
+<div class="emote-card" data-trigger="*(嘤嘤嘤)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E212.png" alt="嘤嘤嘤"></div><div class="emote-code">E212</div><div class="emote-trigger">*(嘤嘤嘤)</div></div></div></section>
+<section class="section reveal" id="手势"><h2>手势  <span class="count">30 个</span></h2><div class="grid"><div class="emote-card" data-trigger="*(点赞)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E152.png" alt="点赞"></div><div class="emote-code">E152</div><div class="emote-trigger">*(点赞)</div></div>
+<div class="emote-card" data-trigger="*(赞)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E153.png" alt="赞"></div><div class="emote-code">E153</div><div class="emote-trigger">*(赞)</div></div>
+<div class="emote-card" data-trigger="*(好)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E154.png" alt="好"></div><div class="emote-code">E154</div><div class="emote-trigger">*(好)</div></div>
+<div class="emote-card" data-trigger="*(差评)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E155.png" alt="差评"></div><div class="emote-code">E155</div><div class="emote-trigger">*(差评)</div></div>
+<div class="emote-card" data-trigger="*(踩)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E156.png" alt="踩"></div><div class="emote-code">E156</div><div class="emote-trigger">*(踩)</div></div>
+<div class="emote-card" data-trigger="*(鼓掌)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E157.png" alt="鼓掌"></div><div class="emote-code">E157</div><div class="emote-trigger">*(鼓掌)</div></div>
+<div class="emote-card" data-trigger="*(欢迎)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E158.png" alt="欢迎"></div><div class="emote-code">E158</div><div class="emote-trigger">*(欢迎)</div></div>
+<div class="emote-card" data-trigger="*(握手)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E159.png" alt="握手"></div><div class="emote-code">E159</div><div class="emote-trigger">*(握手)</div></div>
+<div class="emote-card" data-trigger="*(击掌)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E15A.png" alt="击掌"></div><div class="emote-code">E15A</div><div class="emote-trigger">*(击掌)</div></div>
+<div class="emote-card" data-trigger="*(加油)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E15B.png" alt="加油"></div><div class="emote-code">E15B</div><div class="emote-trigger">*(加油)</div></div>
+<div class="emote-card" data-trigger="*(肌肉)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E15C.png" alt="肌肉"></div><div class="emote-code">E15C</div><div class="emote-trigger">*(肌肉)</div></div>
+<div class="emote-card" data-trigger="*(强壮)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E15D.png" alt="强壮"></div><div class="emote-code">E15D</div><div class="emote-trigger">*(强壮)</div></div>
+<div class="emote-card" data-trigger="*(拳头)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E15E.png" alt="拳头"></div><div class="emote-code">E15E</div><div class="emote-trigger">*(拳头)</div></div>
+<div class="emote-card" data-trigger="*(打)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E15F.png" alt="打"></div><div class="emote-code">E15F</div><div class="emote-trigger">*(打)</div></div>
+<div class="emote-card" data-trigger="*(比心)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E160.png" alt="比心"></div><div class="emote-code">E160</div><div class="emote-trigger">*(比心)</div></div>
+<div class="emote-card" data-trigger="*(爱)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E161.png" alt="爱"></div><div class="emote-code">E161</div><div class="emote-trigger">*(爱)</div></div>
+<div class="emote-card" data-trigger="*(拥抱)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E162.png" alt="拥抱"></div><div class="emote-code">E162</div><div class="emote-trigger">*(拥抱)</div></div>
+<div class="emote-card" data-trigger="*(抱抱)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E163.png" alt="抱抱"></div><div class="emote-code">E163</div><div class="emote-trigger">*(抱抱)</div></div>
+<div class="emote-card" data-trigger="*(祈祷)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E164.png" alt="祈祷"></div><div class="emote-code">E164</div><div class="emote-trigger">*(祈祷)</div></div>
+<div class="emote-card" data-trigger="*(拜托)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E165.png" alt="拜托"></div><div class="emote-code">E165</div><div class="emote-trigger">*(拜托)</div></div>
+<div class="emote-card" data-trigger="*(拜拜)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E166.png" alt="拜拜"></div><div class="emote-code">E166</div><div class="emote-trigger">*(拜拜)</div></div>
+<div class="emote-card" data-trigger="*(挥手)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E167.png" alt="挥手"></div><div class="emote-code">E167</div><div class="emote-trigger">*(挥手)</div></div>
+<div class="emote-card" data-trigger="*(嗨)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E168.png" alt="嗨"></div><div class="emote-code">E168</div><div class="emote-trigger">*(嗨)</div></div>
+<div class="emote-card" data-trigger="*(你好)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E169.png" alt="你好"></div><div class="emote-code">E169</div><div class="emote-trigger">*(你好)</div></div>
+<div class="emote-card" data-trigger="*(OK)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E16A.png" alt="OK"></div><div class="emote-code">E16A</div><div class="emote-trigger">*(OK)</div></div>
+<div class="emote-card" data-trigger="*(可以)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E16B.png" alt="可以"></div><div class="emote-code">E16B</div><div class="emote-trigger">*(可以)</div></div>
+<div class="emote-card" data-trigger="*(摇滚)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E16C.png" alt="摇滚"></div><div class="emote-code">E16C</div><div class="emote-trigger">*(摇滚)</div></div>
+<div class="emote-card" data-trigger="*(打电话)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E16D.png" alt="打电话"></div><div class="emote-code">E16D</div><div class="emote-trigger">*(打电话)</div></div>
+<div class="emote-card" data-trigger="*(点赞手势)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E16E.png" alt="点赞手势"></div><div class="emote-code">E16E</div><div class="emote-trigger">*(点赞手势)</div></div>
+<div class="emote-card" data-trigger="*(竖起大拇指)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E16F.png" alt="竖起大拇指"></div><div class="emote-code">E16F</div><div class="emote-trigger">*(竖起大拇指)</div></div></div></section>
+<section class="section reveal" id="心形"><h2>心形 <span class="badge badge-good">常用</span> <span class="count">15 个</span></h2><div class="grid"><div class="emote-card" data-trigger="*(爱心)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E170.png" alt="爱心"></div><div class="emote-code">E170</div><div class="emote-trigger">*(爱心)</div></div>
+<div class="emote-card" data-trigger="*(红心)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E171.png" alt="红心"></div><div class="emote-code">E171</div><div class="emote-trigger">*(红心)</div></div>
+<div class="emote-card" data-trigger="*(心)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E172.png" alt="心"></div><div class="emote-code">E172</div><div class="emote-trigger">*(心)</div></div>
+<div class="emote-card" data-trigger="*(心动)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E173.png" alt="心动"></div><div class="emote-code">E173</div><div class="emote-trigger">*(心动)</div></div>
+<div class="emote-card" data-trigger="*(心跳)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E174.png" alt="心跳"></div><div class="emote-code">E174</div><div class="emote-trigger">*(心跳)</div></div>
+<div class="emote-card" data-trigger="*(双心)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E175.png" alt="双心"></div><div class="emote-code">E175</div><div class="emote-trigger">*(双心)</div></div>
+<div class="emote-card" data-trigger="*(心碎)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E176.png" alt="心碎"></div><div class="emote-code">E176</div><div class="emote-trigger">*(心碎)</div></div>
+<div class="emote-card" data-trigger="*(破碎)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E177.png" alt="破碎"></div><div class="emote-code">E177</div><div class="emote-trigger">*(破碎)</div></div>
+<div class="emote-card" data-trigger="*(蓝心)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E178.png" alt="蓝心"></div><div class="emote-code">E178</div><div class="emote-trigger">*(蓝心)</div></div>
+<div class="emote-card" data-trigger="*(绿心)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E179.png" alt="绿心"></div><div class="emote-code">E179</div><div class="emote-trigger">*(绿心)</div></div>
+<div class="emote-card" data-trigger="*(黄心)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E17A.png" alt="黄心"></div><div class="emote-code">E17A</div><div class="emote-trigger">*(黄心)</div></div>
+<div class="emote-card" data-trigger="*(紫心)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E17B.png" alt="紫心"></div><div class="emote-code">E17B</div><div class="emote-trigger">*(紫心)</div></div>
+<div class="emote-card" data-trigger="*(闪心)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E17C.png" alt="闪心"></div><div class="emote-code">E17C</div><div class="emote-trigger">*(闪心)</div></div>
+<div class="emote-card" data-trigger="*(爱心箭)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E17D.png" alt="爱心箭"></div><div class="emote-code">E17D</div><div class="emote-trigger">*(爱心箭)</div></div>
+<div class="emote-card" data-trigger="*(微笑心)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E17E.png" alt="微笑心"></div><div class="emote-code">E17E</div><div class="emote-trigger">*(微笑心)</div></div></div></section>
+<section class="section reveal" id="动物"><h2>动物  <span class="count">52 个</span></h2><div class="grid"><div class="emote-card" data-trigger="*(狗)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E17F.png" alt="狗"></div><div class="emote-code">E17F</div><div class="emote-trigger">*(狗)</div></div>
+<div class="emote-card" data-trigger="*(狗狗)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E180.png" alt="狗狗"></div><div class="emote-code">E180</div><div class="emote-trigger">*(狗狗)</div></div>
+<div class="emote-card" data-trigger="*(小狗)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E181.png" alt="小狗"></div><div class="emote-code">E181</div><div class="emote-trigger">*(小狗)</div></div>
+<div class="emote-card" data-trigger="*(猫)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E182.png" alt="猫"></div><div class="emote-code">E182</div><div class="emote-trigger">*(猫)</div></div>
+<div class="emote-card" data-trigger="*(猫咪)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E183.png" alt="猫咪"></div><div class="emote-code">E183</div><div class="emote-trigger">*(猫咪)</div></div>
+<div class="emote-card" data-trigger="*(小猫)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E184.png" alt="小猫"></div><div class="emote-code">E184</div><div class="emote-trigger">*(小猫)</div></div>
+<div class="emote-card" data-trigger="*(熊)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E185.png" alt="熊"></div><div class="emote-code">E185</div><div class="emote-trigger">*(熊)</div></div>
+<div class="emote-card" data-trigger="*(熊熊)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E186.png" alt="熊熊"></div><div class="emote-code">E186</div><div class="emote-trigger">*(熊熊)</div></div>
+<div class="emote-card" data-trigger="*(熊猫)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E187.png" alt="熊猫"></div><div class="emote-code">E187</div><div class="emote-trigger">*(熊猫)</div></div>
+<div class="emote-card" data-trigger="*(兔子)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E188.png" alt="兔子"></div><div class="emote-code">E188</div><div class="emote-trigger">*(兔子)</div></div>
+<div class="emote-card" data-trigger="*(兔兔)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E189.png" alt="兔兔"></div><div class="emote-code">E189</div><div class="emote-trigger">*(兔兔)</div></div>
+<div class="emote-card" data-trigger="*(仓鼠)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E18A.png" alt="仓鼠"></div><div class="emote-code">E18A</div><div class="emote-trigger">*(仓鼠)</div></div>
+<div class="emote-card" data-trigger="*(老鼠)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E18B.png" alt="老鼠"></div><div class="emote-code">E18B</div><div class="emote-trigger">*(老鼠)</div></div>
+<div class="emote-card" data-trigger="*(猪)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E18C.png" alt="猪"></div><div class="emote-code">E18C</div><div class="emote-trigger">*(猪)</div></div>
+<div class="emote-card" data-trigger="*(猪猪)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E18D.png" alt="猪猪"></div><div class="emote-code">E18D</div><div class="emote-trigger">*(猪猪)</div></div>
+<div class="emote-card" data-trigger="*(牛牛)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E18E.png" alt="牛牛"></div><div class="emote-code">E18E</div><div class="emote-trigger">*(牛牛)</div></div>
+<div class="emote-card" data-trigger="*(奶牛)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E18F.png" alt="奶牛"></div><div class="emote-code">E18F</div><div class="emote-trigger">*(奶牛)</div></div>
+<div class="emote-card" data-trigger="*(马)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E190.png" alt="马"></div><div class="emote-code">E190</div><div class="emote-trigger">*(马)</div></div>
+<div class="emote-card" data-trigger="*(马马)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E191.png" alt="马马"></div><div class="emote-code">E191</div><div class="emote-trigger">*(马马)</div></div>
+<div class="emote-card" data-trigger="*(羊)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E192.png" alt="羊"></div><div class="emote-code">E192</div><div class="emote-trigger">*(羊)</div></div>
+<div class="emote-card" data-trigger="*(羊羊)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E193.png" alt="羊羊"></div><div class="emote-code">E193</div><div class="emote-trigger">*(羊羊)</div></div>
+<div class="emote-card" data-trigger="*(鸡)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E194.png" alt="鸡"></div><div class="emote-code">E194</div><div class="emote-trigger">*(鸡)</div></div>
+<div class="emote-card" data-trigger="*(小鸡)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E195.png" alt="小鸡"></div><div class="emote-code">E195</div><div class="emote-trigger">*(小鸡)</div></div>
+<div class="emote-card" data-trigger="*(鸟)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E196.png" alt="鸟"></div><div class="emote-code">E196</div><div class="emote-trigger">*(鸟)</div></div>
+<div class="emote-card" data-trigger="*(小鸟)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E197.png" alt="小鸟"></div><div class="emote-code">E197</div><div class="emote-trigger">*(小鸟)</div></div>
+<div class="emote-card" data-trigger="*(企鹅)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E198.png" alt="企鹅"></div><div class="emote-code">E198</div><div class="emote-trigger">*(企鹅)</div></div>
+<div class="emote-card" data-trigger="*(鸭子)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E199.png" alt="鸭子"></div><div class="emote-code">E199</div><div class="emote-trigger">*(鸭子)</div></div>
+<div class="emote-card" data-trigger="*(青蛙)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E19A.png" alt="青蛙"></div><div class="emote-code">E19A</div><div class="emote-trigger">*(青蛙)</div></div>
+<div class="emote-card" data-trigger="*(鱼)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E19B.png" alt="鱼"></div><div class="emote-code">E19B</div><div class="emote-trigger">*(鱼)</div></div>
+<div class="emote-card" data-trigger="*(小鱼)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E19C.png" alt="小鱼"></div><div class="emote-code">E19C</div><div class="emote-trigger">*(小鱼)</div></div>
+<div class="emote-card" data-trigger="*(鲸鱼)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E19D.png" alt="鲸鱼"></div><div class="emote-code">E19D</div><div class="emote-trigger">*(鲸鱼)</div></div>
+<div class="emote-card" data-trigger="*(海豚)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E19E.png" alt="海豚"></div><div class="emote-code">E19E</div><div class="emote-trigger">*(海豚)</div></div>
+<div class="emote-card" data-trigger="*(章鱼)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E19F.png" alt="章鱼"></div><div class="emote-code">E19F</div><div class="emote-trigger">*(章鱼)</div></div>
+<div class="emote-card" data-trigger="*(乌龟)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1A0.png" alt="乌龟"></div><div class="emote-code">E1A0</div><div class="emote-trigger">*(乌龟)</div></div>
+<div class="emote-card" data-trigger="*(蛇)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1A1.png" alt="蛇"></div><div class="emote-code">E1A1</div><div class="emote-trigger">*(蛇)</div></div>
+<div class="emote-card" data-trigger="*(龙)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1A2.png" alt="龙"></div><div class="emote-code">E1A2</div><div class="emote-trigger">*(龙)</div></div>
+<div class="emote-card" data-trigger="*(老虎)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1A3.png" alt="老虎"></div><div class="emote-code">E1A3</div><div class="emote-trigger">*(老虎)</div></div>
+<div class="emote-card" data-trigger="*(老虎头)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1A4.png" alt="老虎头"></div><div class="emote-code">E1A4</div><div class="emote-trigger">*(老虎头)</div></div>
+<div class="emote-card" data-trigger="*(猴子)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1A5.png" alt="猴子"></div><div class="emote-code">E1A5</div><div class="emote-trigger">*(猴子)</div></div>
+<div class="emote-card" data-trigger="*(猴)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1A6.png" alt="猴"></div><div class="emote-code">E1A6</div><div class="emote-trigger">*(猴)</div></div>
+<div class="emote-card" data-trigger="*(狼)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1A7.png" alt="狼"></div><div class="emote-code">E1A7</div><div class="emote-trigger">*(狼)</div></div>
+<div class="emote-card" data-trigger="*(狐狸)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1A8.png" alt="狐狸"></div><div class="emote-code">E1A8</div><div class="emote-trigger">*(狐狸)</div></div>
+<div class="emote-card" data-trigger="*(考拉)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1A9.png" alt="考拉"></div><div class="emote-code">E1A9</div><div class="emote-trigger">*(考拉)</div></div>
+<div class="emote-card" data-trigger="*(大象)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1AA.png" alt="大象"></div><div class="emote-code">E1AA</div><div class="emote-trigger">*(大象)</div></div>
+<div class="emote-card" data-trigger="*(长颈鹿)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1AB.png" alt="长颈鹿"></div><div class="emote-code">E1AB</div><div class="emote-trigger">*(长颈鹿)</div></div>
+<div class="emote-card" data-trigger="*(恐龙)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1AC.png" alt="恐龙"></div><div class="emote-code">E1AC</div><div class="emote-trigger">*(恐龙)</div></div>
+<div class="emote-card" data-trigger="*(蜜蜂)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1AD.png" alt="蜜蜂"></div><div class="emote-code">E1AD</div><div class="emote-trigger">*(蜜蜂)</div></div>
+<div class="emote-card" data-trigger="*(蝴蝶)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1AE.png" alt="蝴蝶"></div><div class="emote-code">E1AE</div><div class="emote-trigger">*(蝴蝶)</div></div>
+<div class="emote-card" data-trigger="*(蜗牛)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1AF.png" alt="蜗牛"></div><div class="emote-code">E1AF</div><div class="emote-trigger">*(蜗牛)</div></div>
+<div class="emote-card" data-trigger="*(蜘蛛)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1B0.png" alt="蜘蛛"></div><div class="emote-code">E1B0</div><div class="emote-trigger">*(蜘蛛)</div></div>
+<div class="emote-card" data-trigger="*(螃蟹)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1B1.png" alt="螃蟹"></div><div class="emote-code">E1B1</div><div class="emote-trigger">*(螃蟹)</div></div>
+<div class="emote-card" data-trigger="*(瓢虫)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1B2.png" alt="瓢虫"></div><div class="emote-code">E1B2</div><div class="emote-trigger">*(瓢虫)</div></div></div></section>
+<section class="section reveal" id="食物"><h2>食物  <span class="count">48 个</span></h2><div class="grid"><div class="emote-card" data-trigger="*(苹果)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1B3.png" alt="苹果"></div><div class="emote-code">E1B3</div><div class="emote-trigger">*(苹果)</div></div>
+<div class="emote-card" data-trigger="*(香蕉)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1B4.png" alt="香蕉"></div><div class="emote-code">E1B4</div><div class="emote-trigger">*(香蕉)</div></div>
+<div class="emote-card" data-trigger="*(葡萄)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1B5.png" alt="葡萄"></div><div class="emote-code">E1B5</div><div class="emote-trigger">*(葡萄)</div></div>
+<div class="emote-card" data-trigger="*(西瓜)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1B6.png" alt="西瓜"></div><div class="emote-code">E1B6</div><div class="emote-trigger">*(西瓜)</div></div>
+<div class="emote-card" data-trigger="*(草莓)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1B7.png" alt="草莓"></div><div class="emote-code">E1B7</div><div class="emote-trigger">*(草莓)</div></div>
+<div class="emote-card" data-trigger="*(樱桃)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1B8.png" alt="樱桃"></div><div class="emote-code">E1B8</div><div class="emote-trigger">*(樱桃)</div></div>
+<div class="emote-card" data-trigger="*(橙子)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1B9.png" alt="橙子"></div><div class="emote-code">E1B9</div><div class="emote-trigger">*(橙子)</div></div>
+<div class="emote-card" data-trigger="*(柠檬)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1BA.png" alt="柠檬"></div><div class="emote-code">E1BA</div><div class="emote-trigger">*(柠檬)</div></div>
+<div class="emote-card" data-trigger="*(梨)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1BB.png" alt="梨"></div><div class="emote-code">E1BB</div><div class="emote-trigger">*(梨)</div></div>
+<div class="emote-card" data-trigger="*(桃子)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1BC.png" alt="桃子"></div><div class="emote-code">E1BC</div><div class="emote-trigger">*(桃子)</div></div>
+<div class="emote-card" data-trigger="*(菠萝)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1BD.png" alt="菠萝"></div><div class="emote-code">E1BD</div><div class="emote-trigger">*(菠萝)</div></div>
+<div class="emote-card" data-trigger="*(汉堡)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1BE.png" alt="汉堡"></div><div class="emote-code">E1BE</div><div class="emote-trigger">*(汉堡)</div></div>
+<div class="emote-card" data-trigger="*(汉堡包)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1BF.png" alt="汉堡包"></div><div class="emote-code">E1BF</div><div class="emote-trigger">*(汉堡包)</div></div>
+<div class="emote-card" data-trigger="*(披萨)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1C0.png" alt="披萨"></div><div class="emote-code">E1C0</div><div class="emote-trigger">*(披萨)</div></div>
+<div class="emote-card" data-trigger="*(薯条)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1C1.png" alt="薯条"></div><div class="emote-code">E1C1</div><div class="emote-trigger">*(薯条)</div></div>
+<div class="emote-card" data-trigger="*(炸鸡)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1C2.png" alt="炸鸡"></div><div class="emote-code">E1C2</div><div class="emote-trigger">*(炸鸡)</div></div>
+<div class="emote-card" data-trigger="*(鸡腿)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1C3.png" alt="鸡腿"></div><div class="emote-code">E1C3</div><div class="emote-trigger">*(鸡腿)</div></div>
+<div class="emote-card" data-trigger="*(蛋糕)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1C4.png" alt="蛋糕"></div><div class="emote-code">E1C4</div><div class="emote-trigger">*(蛋糕)</div></div>
+<div class="emote-card" data-trigger="*(生日蛋糕)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1C5.png" alt="生日蛋糕"></div><div class="emote-code">E1C5</div><div class="emote-trigger">*(生日蛋糕)</div></div>
+<div class="emote-card" data-trigger="*(冰淇淋)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1C6.png" alt="冰淇淋"></div><div class="emote-code">E1C6</div><div class="emote-trigger">*(冰淇淋)</div></div>
+<div class="emote-card" data-trigger="*(冰激凌)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1C7.png" alt="冰激凌"></div><div class="emote-code">E1C7</div><div class="emote-trigger">*(冰激凌)</div></div>
+<div class="emote-card" data-trigger="*(甜甜圈)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1C8.png" alt="甜甜圈"></div><div class="emote-code">E1C8</div><div class="emote-trigger">*(甜甜圈)</div></div>
+<div class="emote-card" data-trigger="*(巧克力)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1C9.png" alt="巧克力"></div><div class="emote-code">E1C9</div><div class="emote-trigger">*(巧克力)</div></div>
+<div class="emote-card" data-trigger="*(糖果)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1CA.png" alt="糖果"></div><div class="emote-code">E1CA</div><div class="emote-trigger">*(糖果)</div></div>
+<div class="emote-card" data-trigger="*(棒棒糖)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1CB.png" alt="棒棒糖"></div><div class="emote-code">E1CB</div><div class="emote-trigger">*(棒棒糖)</div></div>
+<div class="emote-card" data-trigger="*(饼干)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1CC.png" alt="饼干"></div><div class="emote-code">E1CC</div><div class="emote-trigger">*(饼干)</div></div>
+<div class="emote-card" data-trigger="*(面包)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1CD.png" alt="面包"></div><div class="emote-code">E1CD</div><div class="emote-trigger">*(面包)</div></div>
+<div class="emote-card" data-trigger="*(米饭)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1CE.png" alt="米饭"></div><div class="emote-code">E1CE</div><div class="emote-trigger">*(米饭)</div></div>
+<div class="emote-card" data-trigger="*(面条)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1CF.png" alt="面条"></div><div class="emote-code">E1CF</div><div class="emote-trigger">*(面条)</div></div>
+<div class="emote-card" data-trigger="*(拉面)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1D0.png" alt="拉面"></div><div class="emote-code">E1D0</div><div class="emote-trigger">*(拉面)</div></div>
+<div class="emote-card" data-trigger="*(寿司)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1D1.png" alt="寿司"></div><div class="emote-code">E1D1</div><div class="emote-trigger">*(寿司)</div></div>
+<div class="emote-card" data-trigger="*(饭团)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1D2.png" alt="饭团"></div><div class="emote-code">E1D2</div><div class="emote-trigger">*(饭团)</div></div>
+<div class="emote-card" data-trigger="*(饺子)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1D3.png" alt="饺子"></div><div class="emote-code">E1D3</div><div class="emote-trigger">*(饺子)</div></div>
+<div class="emote-card" data-trigger="*(火锅)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1D4.png" alt="火锅"></div><div class="emote-code">E1D4</div><div class="emote-trigger">*(火锅)</div></div>
+<div class="emote-card" data-trigger="*(炖菜)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1D5.png" alt="炖菜"></div><div class="emote-code">E1D5</div><div class="emote-trigger">*(炖菜)</div></div>
+<div class="emote-card" data-trigger="*(咖啡)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1D6.png" alt="咖啡"></div><div class="emote-code">E1D6</div><div class="emote-trigger">*(咖啡)</div></div>
+<div class="emote-card" data-trigger="*(咖啡杯)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1D7.png" alt="咖啡杯"></div><div class="emote-code">E1D7</div><div class="emote-trigger">*(咖啡杯)</div></div>
+<div class="emote-card" data-trigger="*(奶茶)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1D8.png" alt="奶茶"></div><div class="emote-code">E1D8</div><div class="emote-trigger">*(奶茶)</div></div>
+<div class="emote-card" data-trigger="*(茶)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1D9.png" alt="茶"></div><div class="emote-code">E1D9</div><div class="emote-trigger">*(茶)</div></div>
+<div class="emote-card" data-trigger="*(啤酒)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1DA.png" alt="啤酒"></div><div class="emote-code">E1DA</div><div class="emote-trigger">*(啤酒)</div></div>
+<div class="emote-card" data-trigger="*(干杯)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1DB.png" alt="干杯"></div><div class="emote-code">E1DB</div><div class="emote-trigger">*(干杯)</div></div>
+<div class="emote-card" data-trigger="*(饮料)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1DC.png" alt="饮料"></div><div class="emote-code">E1DC</div><div class="emote-trigger">*(饮料)</div></div>
+<div class="emote-card" data-trigger="*(爆米花)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1DD.png" alt="爆米花"></div><div class="emote-code">E1DD</div><div class="emote-trigger">*(爆米花)</div></div>
+<div class="emote-card" data-trigger="*(糖果棒)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1DE.png" alt="糖果棒"></div><div class="emote-code">E1DE</div><div class="emote-trigger">*(糖果棒)</div></div>
+<div class="emote-card" data-trigger="*(肉)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1DF.png" alt="肉"></div><div class="emote-code">E1DF</div><div class="emote-trigger">*(肉)</div></div>
+<div class="emote-card" data-trigger="*(排骨)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1E0.png" alt="排骨"></div><div class="emote-code">E1E0</div><div class="emote-trigger">*(排骨)</div></div>
+<div class="emote-card" data-trigger="*(鸡蛋)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1E1.png" alt="鸡蛋"></div><div class="emote-code">E1E1</div><div class="emote-trigger">*(鸡蛋)</div></div>
+<div class="emote-card" data-trigger="*(牛奶)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1E2.png" alt="牛奶"></div><div class="emote-code">E1E2</div><div class="emote-trigger">*(牛奶)</div></div></div></section>
+<section class="section reveal" id="Minecraft 物品"><h2>Minecraft 物品 <span class="badge badge-mc">Minecraft</span> <span class="count">16 个</span></h2><div class="grid"><div class="emote-card" data-trigger="*(钻石剑)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E237.png" alt="钻石剑"></div><div class="emote-code">E237</div><div class="emote-trigger">*(钻石剑)</div></div>
+<div class="emote-card" data-trigger="*(不死图腾)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E238.png" alt="不死图腾"></div><div class="emote-code">E238</div><div class="emote-trigger">*(不死图腾)</div></div>
+<div class="emote-card" data-trigger="*(钻石头盔)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E239.png" alt="钻石头盔"></div><div class="emote-code">E239</div><div class="emote-trigger">*(钻石头盔)</div></div>
+<div class="emote-card" data-trigger="*(钻石胸甲)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E23A.png" alt="钻石胸甲"></div><div class="emote-code">E23A</div><div class="emote-trigger">*(钻石胸甲)</div></div>
+<div class="emote-card" data-trigger="*(钻石护腿)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E23B.png" alt="钻石护腿"></div><div class="emote-code">E23B</div><div class="emote-trigger">*(钻石护腿)</div></div>
+<div class="emote-card" data-trigger="*(钻石靴子)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E23C.png" alt="钻石靴子"></div><div class="emote-code">E23C</div><div class="emote-trigger">*(钻石靴子)</div></div>
+<div class="emote-card" data-trigger="*(金苹果)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E23D.png" alt="金苹果"></div><div class="emote-code">E23D</div><div class="emote-trigger">*(金苹果)</div></div>
+<div class="emote-card" data-trigger="*(盾牌)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E23E.png" alt="盾牌"></div><div class="emote-code">E23E</div><div class="emote-trigger">*(盾牌)</div></div>
+<div class="emote-card" data-trigger="*(蜘蛛网)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E23F.png" alt="蜘蛛网"></div><div class="emote-code">E23F</div><div class="emote-trigger">*(蜘蛛网)</div></div>
+<div class="emote-card" data-trigger="*(水桶)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E240.png" alt="水桶"></div><div class="emote-code">E240</div><div class="emote-trigger">*(水桶)</div></div>
+<div class="emote-card" data-trigger="*(岩浆桶)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E241.png" alt="岩浆桶"></div><div class="emote-code">E241</div><div class="emote-trigger">*(岩浆桶)</div></div>
+<div class="emote-card" data-trigger="*(骨头)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E242.png" alt="骨头"></div><div class="emote-code">E242</div><div class="emote-trigger">*(骨头)</div></div>
+<div class="emote-card" data-trigger="*(末影珍珠)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E243.png" alt="末影珍珠"></div><div class="emote-code">E243</div><div class="emote-trigger">*(末影珍珠)</div></div>
+<div class="emote-card" data-trigger="*(末影之眼)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E244.png" alt="末影之眼"></div><div class="emote-code">E244</div><div class="emote-trigger">*(末影之眼)</div></div>
+<div class="emote-card" data-trigger="*(打火石)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E245.png" alt="打火石"></div><div class="emote-code">E245</div><div class="emote-trigger">*(打火石)</div></div>
+<div class="emote-card" data-trigger="*(火焰弹)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E246.png" alt="火焰弹"></div><div class="emote-code">E246</div><div class="emote-trigger">*(火焰弹)</div></div></div></section>
+<section class="section reveal" id="物品场景"><h2>物品场景  <span class="count">73 个</span></h2><div class="grid"><div class="emote-card" data-trigger="*(礼物)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1E3.png" alt="礼物"></div><div class="emote-code">E1E3</div><div class="emote-trigger">*(礼物)</div></div>
+<div class="emote-card" data-trigger="*(礼盒)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1E4.png" alt="礼盒"></div><div class="emote-code">E1E4</div><div class="emote-trigger">*(礼盒)</div></div>
+<div class="emote-card" data-trigger="*(礼物盒)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1E5.png" alt="礼物盒"></div><div class="emote-code">E1E5</div><div class="emote-trigger">*(礼物盒)</div></div>
+<div class="emote-card" data-trigger="*(钱)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1E6.png" alt="钱"></div><div class="emote-code">E1E6</div><div class="emote-trigger">*(钱)</div></div>
+<div class="emote-card" data-trigger="*(发财)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1E7.png" alt="发财"></div><div class="emote-code">E1E7</div><div class="emote-trigger">*(发财)</div></div>
+<div class="emote-card" data-trigger="*(钱袋)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1E8.png" alt="钱袋"></div><div class="emote-code">E1E8</div><div class="emote-trigger">*(钱袋)</div></div>
+<div class="emote-card" data-trigger="*(财富)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1E9.png" alt="财富"></div><div class="emote-code">E1E9</div><div class="emote-trigger">*(财富)</div></div>
+<div class="emote-card" data-trigger="*(宝石)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1EA.png" alt="宝石"></div><div class="emote-code">E1EA</div><div class="emote-trigger">*(宝石)</div></div>
+<div class="emote-card" data-trigger="*(钻石)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1EB.png" alt="钻石"></div><div class="emote-code">E1EB</div><div class="emote-trigger">*(钻石)</div></div>
+<div class="emote-card" data-trigger="*(戒指)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1EC.png" alt="戒指"></div><div class="emote-code">E1EC</div><div class="emote-trigger">*(戒指)</div></div>
+<div class="emote-card" data-trigger="*(皇冠)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1ED.png" alt="皇冠"></div><div class="emote-code">E1ED</div><div class="emote-trigger">*(皇冠)</div></div>
+<div class="emote-card" data-trigger="*(奖杯)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1EE.png" alt="奖杯"></div><div class="emote-code">E1EE</div><div class="emote-trigger">*(奖杯)</div></div>
+<div class="emote-card" data-trigger="*(胜利)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1EF.png" alt="胜利"></div><div class="emote-code">E1EF</div><div class="emote-trigger">*(胜利)</div></div>
+<div class="emote-card" data-trigger="*(金牌)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1F0.png" alt="金牌"></div><div class="emote-code">E1F0</div><div class="emote-trigger">*(金牌)</div></div>
+<div class="emote-card" data-trigger="*(银牌)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1F1.png" alt="银牌"></div><div class="emote-code">E1F1</div><div class="emote-trigger">*(银牌)</div></div>
+<div class="emote-card" data-trigger="*(铜牌)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1F2.png" alt="铜牌"></div><div class="emote-code">E1F2</div><div class="emote-trigger">*(铜牌)</div></div>
+<div class="emote-card" data-trigger="*(火焰)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1F3.png" alt="火焰"></div><div class="emote-code">E1F3</div><div class="emote-trigger">*(火焰)</div></div>
+<div class="emote-card" data-trigger="*(火)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1F4.png" alt="火"></div><div class="emote-code">E1F4</div><div class="emote-trigger">*(火)</div></div>
+<div class="emote-card" data-trigger="*(闪电)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1F5.png" alt="闪电"></div><div class="emote-code">E1F5</div><div class="emote-trigger">*(闪电)</div></div>
+<div class="emote-card" data-trigger="*(雷)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1F6.png" alt="雷"></div><div class="emote-code">E1F6</div><div class="emote-trigger">*(雷)</div></div>
+<div class="emote-card" data-trigger="*(雨)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1F7.png" alt="雨"></div><div class="emote-code">E1F7</div><div class="emote-trigger">*(雨)</div></div>
+<div class="emote-card" data-trigger="*(下雨)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1F8.png" alt="下雨"></div><div class="emote-code">E1F8</div><div class="emote-trigger">*(下雨)</div></div>
+<div class="emote-card" data-trigger="*(雪)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1F9.png" alt="雪"></div><div class="emote-code">E1F9</div><div class="emote-trigger">*(雪)</div></div>
+<div class="emote-card" data-trigger="*(雪花)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1FA.png" alt="雪花"></div><div class="emote-code">E1FA</div><div class="emote-trigger">*(雪花)</div></div>
+<div class="emote-card" data-trigger="*(彩虹)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1FB.png" alt="彩虹"></div><div class="emote-code">E1FB</div><div class="emote-trigger">*(彩虹)</div></div>
+<div class="emote-card" data-trigger="*(太阳)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1FC.png" alt="太阳"></div><div class="emote-code">E1FC</div><div class="emote-trigger">*(太阳)</div></div>
+<div class="emote-card" data-trigger="*(月亮)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1FD.png" alt="月亮"></div><div class="emote-code">E1FD</div><div class="emote-trigger">*(月亮)</div></div>
+<div class="emote-card" data-trigger="*(星星)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1FE.png" alt="星星"></div><div class="emote-code">E1FE</div><div class="emote-trigger">*(星星)</div></div>
+<div class="emote-card" data-trigger="*(闪闪)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E1FF.png" alt="闪闪"></div><div class="emote-code">E1FF</div><div class="emote-trigger">*(闪闪)</div></div>
+<div class="emote-card" data-trigger="*(炸弹)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E200.png" alt="炸弹"></div><div class="emote-code">E200</div><div class="emote-trigger">*(炸弹)</div></div>
+<div class="emote-card" data-trigger="*(爆炸)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E201.png" alt="爆炸"></div><div class="emote-code">E201</div><div class="emote-trigger">*(爆炸)</div></div>
+<div class="emote-card" data-trigger="*(骷髅)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E202.png" alt="骷髅"></div><div class="emote-code">E202</div><div class="emote-trigger">*(骷髅)</div></div>
+<div class="emote-card" data-trigger="*(鬼)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E203.png" alt="鬼"></div><div class="emote-code">E203</div><div class="emote-trigger">*(鬼)</div></div>
+<div class="emote-card" data-trigger="*(幽灵)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E204.png" alt="幽灵"></div><div class="emote-code">E204</div><div class="emote-trigger">*(幽灵)</div></div>
+<div class="emote-card" data-trigger="*(外星人)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E205.png" alt="外星人"></div><div class="emote-code">E205</div><div class="emote-trigger">*(外星人)</div></div>
+<div class="emote-card" data-trigger="*(机器人)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E206.png" alt="机器人"></div><div class="emote-code">E206</div><div class="emote-trigger">*(机器人)</div></div>
+<div class="emote-card" data-trigger="*(恶魔)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E207.png" alt="恶魔"></div><div class="emote-code">E207</div><div class="emote-trigger">*(恶魔)</div></div>
+<div class="emote-card" data-trigger="*(orz)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E213.png" alt="orz"></div><div class="emote-code">E213</div><div class="emote-trigger">*(orz)</div></div>
+<div class="emote-card" data-trigger="*(跪)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E214.png" alt="跪"></div><div class="emote-code">E214</div><div class="emote-trigger">*(跪)</div></div>
+<div class="emote-card" data-trigger="*(帽子)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E215.png" alt="帽子"></div><div class="emote-code">E215</div><div class="emote-trigger">*(帽子)</div></div>
+<div class="emote-card" data-trigger="*(眼镜)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E216.png" alt="眼镜"></div><div class="emote-code">E216</div><div class="emote-trigger">*(眼镜)</div></div>
+<div class="emote-card" data-trigger="*(墨镜)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E217.png" alt="墨镜"></div><div class="emote-code">E217</div><div class="emote-trigger">*(墨镜)</div></div>
+<div class="emote-card" data-trigger="*(耳机)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E218.png" alt="耳机"></div><div class="emote-code">E218</div><div class="emote-trigger">*(耳机)</div></div>
+<div class="emote-card" data-trigger="*(手机)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E219.png" alt="手机"></div><div class="emote-code">E219</div><div class="emote-trigger">*(手机)</div></div>
+<div class="emote-card" data-trigger="*(电脑)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E21A.png" alt="电脑"></div><div class="emote-code">E21A</div><div class="emote-trigger">*(电脑)</div></div>
+<div class="emote-card" data-trigger="*(游戏机)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E21B.png" alt="游戏机"></div><div class="emote-code">E21B</div><div class="emote-trigger">*(游戏机)</div></div>
+<div class="emote-card" data-trigger="*(球)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E21C.png" alt="球"></div><div class="emote-code">E21C</div><div class="emote-trigger">*(球)</div></div>
+<div class="emote-card" data-trigger="*(足球)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E21D.png" alt="足球"></div><div class="emote-code">E21D</div><div class="emote-trigger">*(足球)</div></div>
+<div class="emote-card" data-trigger="*(篮球)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E21E.png" alt="篮球"></div><div class="emote-code">E21E</div><div class="emote-trigger">*(篮球)</div></div>
+<div class="emote-card" data-trigger="*(乒乓球)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E21F.png" alt="乒乓球"></div><div class="emote-code">E21F</div><div class="emote-trigger">*(乒乓球)</div></div>
+<div class="emote-card" data-trigger="*(钥匙)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E220.png" alt="钥匙"></div><div class="emote-code">E220</div><div class="emote-trigger">*(钥匙)</div></div>
+<div class="emote-card" data-trigger="*(锁)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E221.png" alt="锁"></div><div class="emote-code">E221</div><div class="emote-trigger">*(锁)</div></div>
+<div class="emote-card" data-trigger="*(书本)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E222.png" alt="书本"></div><div class="emote-code">E222</div><div class="emote-trigger">*(书本)</div></div>
+<div class="emote-card" data-trigger="*(书)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E223.png" alt="书"></div><div class="emote-code">E223</div><div class="emote-trigger">*(书)</div></div>
+<div class="emote-card" data-trigger="*(铅笔)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E224.png" alt="铅笔"></div><div class="emote-code">E224</div><div class="emote-trigger">*(铅笔)</div></div>
+<div class="emote-card" data-trigger="*(画笔)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E225.png" alt="画笔"></div><div class="emote-code">E225</div><div class="emote-trigger">*(画笔)</div></div>
+<div class="emote-card" data-trigger="*(音乐)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E226.png" alt="音乐"></div><div class="emote-code">E226</div><div class="emote-trigger">*(音乐)</div></div>
+<div class="emote-card" data-trigger="*(音符)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E227.png" alt="音符"></div><div class="emote-code">E227</div><div class="emote-trigger">*(音符)</div></div>
+<div class="emote-card" data-trigger="*(麦克风)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E228.png" alt="麦克风"></div><div class="emote-code">E228</div><div class="emote-trigger">*(麦克风)</div></div>
+<div class="emote-card" data-trigger="*(吉他)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E229.png" alt="吉他"></div><div class="emote-code">E229</div><div class="emote-trigger">*(吉他)</div></div>
+<div class="emote-card" data-trigger="*(铃铛)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E22A.png" alt="铃铛"></div><div class="emote-code">E22A</div><div class="emote-trigger">*(铃铛)</div></div>
+<div class="emote-card" data-trigger="*(房子)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E22B.png" alt="房子"></div><div class="emote-code">E22B</div><div class="emote-trigger">*(房子)</div></div>
+<div class="emote-card" data-trigger="*(医院)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E22C.png" alt="医院"></div><div class="emote-code">E22C</div><div class="emote-trigger">*(医院)</div></div>
+<div class="emote-card" data-trigger="*(学校)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E22D.png" alt="学校"></div><div class="emote-code">E22D</div><div class="emote-trigger">*(学校)</div></div>
+<div class="emote-card" data-trigger="*(商店)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E22E.png" alt="商店"></div><div class="emote-code">E22E</div><div class="emote-trigger">*(商店)</div></div>
+<div class="emote-card" data-trigger="*(汽车)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E22F.png" alt="汽车"></div><div class="emote-code">E22F</div><div class="emote-trigger">*(汽车)</div></div>
+<div class="emote-card" data-trigger="*(车)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E230.png" alt="车"></div><div class="emote-code">E230</div><div class="emote-trigger">*(车)</div></div>
+<div class="emote-card" data-trigger="*(飞机)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E231.png" alt="飞机"></div><div class="emote-code">E231</div><div class="emote-trigger">*(飞机)</div></div>
+<div class="emote-card" data-trigger="*(火箭)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E232.png" alt="火箭"></div><div class="emote-code">E232</div><div class="emote-trigger">*(火箭)</div></div>
+<div class="emote-card" data-trigger="*(船)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E233.png" alt="船"></div><div class="emote-code">E233</div><div class="emote-trigger">*(船)</div></div>
+<div class="emote-card" data-trigger="*(自行车)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E234.png" alt="自行车"></div><div class="emote-code">E234</div><div class="emote-trigger">*(自行车)</div></div>
+<div class="emote-card" data-trigger="*(火车)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E235.png" alt="火车"></div><div class="emote-code">E235</div><div class="emote-trigger">*(火车)</div></div>
+<div class="emote-card" data-trigger="*(坦克)" title="点击复制"><span class="copy-hint">复制</span><div class="emote-img"><img src="images/emotes/E236.png" alt="坦克"></div><div class="emote-code">E236</div><div class="emote-trigger">*(坦克)</div></div></div></section>
+
+</main>
+
+<footer>
+  更多表情包模组(by Mc_comer) · 共 327 个表情 · 基于Twemoji(4.0) 与 Minecraft 官方物品贴图
+</footer>
+
+<button id="toTop" title="回到顶部">&#9650;</button>
+<div id="toast">已复制到剪贴板</div>
+
+<script>
+var cats = ["笑脸", "负面", "手势", "心形", "动物", "食物", "Minecraft 物品", "物品场景"];
+var tabsHtml = '';
+cats.forEach(function(c){ tabsHtml += '<a href="#' + c + '">' + c + '</a>'; });
+document.getElementById('tabs').innerHTML = tabsHtml;
+
+var searchInput = document.getElementById('search');
+searchInput.addEventListener('input', function(){
+  var q = this.value.trim();
+  var cards = document.querySelectorAll('.emote-card');
+  cards.forEach(function(card){
+    var text = card.textContent.toLowerCase();
+    card.classList.toggle('hidden', q !== '' && text.indexOf(q.toLowerCase()) === -1);
+  });
+});
+
+// ===== 点击表情卡片复制 *(x) =====
+var toastTimer = null;
+var toast = document.getElementById('toast');
+function showToast(msg){
+  toast.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(function(){ toast.classList.remove('show'); }, 1500);
+}
+function copyText(text){
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    return navigator.clipboard.writeText(text);
+  }
+  // 降级方案：textarea + execCommand
+  var ta = document.createElement('textarea');
+  ta.value = text;
+  ta.style.position = 'fixed';
+  ta.style.opacity = '0';
+  document.body.appendChild(ta);
+  ta.select();
+  try { document.execCommand('copy'); } catch(e) {}
+  document.body.removeChild(ta);
+  return Promise.resolve();
+}
+document.querySelectorAll('.emote-card').forEach(function(card){
+  card.addEventListener('click', function(){
+    var trigger = card.getAttribute('data-trigger');
+    copyText(trigger).then(function(){
+      showToast('已复制: ' + trigger);
+      card.classList.add('copied');
+      setTimeout(function(){ card.classList.remove('copied'); }, 600);
+    }).catch(function(){
+      showToast('复制失败，请手动复制');
+    });
+  });
+});
+
+// ===== 回到顶部按钮 =====
+var toTop = document.getElementById('toTop');
+var THRESHOLD = 400;  // 滚动超过 400px 才显示
+window.addEventListener('scroll', function(){
+  if (window.pageYOffset > THRESHOLD || document.documentElement.scrollTop > THRESHOLD) {
+    toTop.classList.add('show');
+  } else {
+    toTop.classList.remove('show');
+  }
+});
+toTop.addEventListener('click', function(){
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+// ===== 滚动渐入动画 =====
+var revealObserver = new IntersectionObserver(function(entries){
+  entries.forEach(function(entry){
+    if (entry.isIntersecting) {
+      entry.target.classList.add('in');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(function(el){
+  revealObserver.observe(el);
+});
+</script>
+</body>
+</html>
